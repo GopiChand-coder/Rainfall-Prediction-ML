@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Rainfall Prediction</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+    padding:30px;
+    background: linear-gradient(120deg, #f0f4f8, #d9edf7);
+    background-attachment:fixed;
+}
+
+.container{
+    max-width:950px;
+    margin:auto;
+}
+
+.card{
+    background:#ffffff;
+    border-radius:16px;
+    padding:45px;
+    box-shadow:0 10px 28px rgba(0,0,0,0.08);
+}
+
+h1{
+    text-align:center;
+    color:#1E8E79;
+    font-size:32px;
+    font-weight:700;
+    margin-bottom:35px;
+}
+
+.form-row{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:22px;
+}
+
+.form-row.full{
+    grid-template-columns:1fr;
+}
+
+.form-group{
+    margin-bottom:18px;
+}
+
+label{
+    font-weight:600;
+    color:#445555;
+    margin-bottom:6px;
+    display:block;
+    font-size:14px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px 14px;
+    border-radius:8px;
+    border:1.5px solid #A7D3C7;
+    background:#ffffff;
+    font-size:15px;
+    transition:all 0.25s ease;
+}
+
+input:focus,
+select:focus{
+    outline:none;
+    border-color:#1E8E79;
+    box-shadow:0 0 0 3px rgba(30,142,121,0.15);
+}
+
+.section-title{
+    margin-top:28px;
+    margin-bottom:18px;
+    padding-bottom:8px;
+    font-weight:700;
+    font-size:18px;
+    color:#1E8E79;
+    border-bottom:2px solid #CFE7DF;
+}
+
+button{
+    width:100%;
+    margin-top:30px;
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#1E8E79;
+    color:white;
+    font-size:17px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all 0.25s ease;
+}
+
+button:hover{
+    background:#146B5E;
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(30,142,121,0.25);
+}
+
+button:active{
+    transform:translateY(0);
+}
+
+.info-text{
+    text-align:center;
+    margin-top:20px;
+    color:#6B7C7C;
+    font-size:14px;
+}
+
+.prediction-text{
+    text-align:center;
+    margin-top:20px;
+    font-weight:600;
+    color:#1E8E79;
+    font-size:18px;
+}
+
+@media(max-width:768px){
+    .form-row{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:30px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<div class="card">
+
+<h1>🌧️ Rainfall Prediction</h1>
+
+<form action="{{ url_for('predict') }}" method="post">
+<div class="form-row full">
+<div class="form-group">
+<label>Location</label>
+<select name="Location" required>
+<option value="">Select a location...</option>
+<option value="2">Albury</option>
+<option value="4">BadgerysCreek</option>
+<option value="5">Ballarat</option>
+<option value="6">Bendigo</option>
+<option value="9">Canberra</option>
+<option value="18">Melbourne</option>
+<option value="37">Sydney</option>
+<option value="47">Wollongong</option>
+</select>
+</div>
+</div>
+
+<div class="section-title">🌡️ Temperature</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Min Temperature (°C)</label>
+<input type="number" step="0.1" name="MinTemp" required>
+</div>
+
+<div class="form-group">
+<label>Max Temperature (°C)</label>
+<input type="number" step="0.1" name="MaxTemp" required>
+</div>
+</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Temperature at 9am</label>
+<input type="number" step="0.1" name="Temp9am" required>
+</div>
+
+<div class="form-group">
+<label>Temperature at 3pm</label>
+<input type="number" step="0.1" name="Temp3pm" required>
+</div>
+</div>
+
+<div class="section-title">💧 Rainfall & Wind</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Rainfall (mm)</label>
+<input type="number" step="0.1" name="Rainfall" required>
+</div>
+
+<div class="form-group">
+<label>Wind Gust Speed (km/h)</label>
+<input type="number" step="0.1" name="WindGustSpeed" required>
+</div>
+</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Wind Speed at 9am (km/h)</label>
+<input type="number" step="0.1" name="WindSpeed9am" required>
+</div>
+
+<div class="form-group">
+<label>Wind Speed at 3pm (km/h)</label>
+<input type="number" step="0.1" name="WindSpeed3pm" required>
+</div>
+</div>
+
+<div class="section-title">💨 Humidity</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Humidity at 9am</label>
+<input type="number" step="0.1" name="Humidity9am" required>
+</div>
+
+<div class="form-group">
+<label>Humidity at 3pm</label>
+<input type="number" step="0.1" name="Humidity3pm" required>
+</div>
+</div>
+
+<div class="section-title">📊 Pressure</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Pressure at 9am</label>
+<input type="number" step="0.1" name="Pressure9am" required>
+</div>
+
+<div class="form-group">
+<label>Pressure at 3pm</label>
+<input type="number" step="0.1" name="Pressure3pm" required>
+</div>
+</div>
+
+<div class="section-title">🧭 Wind Direction</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Wind Gust Direction</label>
+<select name="WindGustDir" required>
+<option value="">Select direction...</option>
+<option value="0">N</option>
+<option value="1">NNE</option>
+<option value="2">NE</option>
+<option value="3">ENE</option>
+<option value="4">E</option>
+<option value="5">ESE</option>
+<option value="6">SE</option>
+<option value="7">SSE</option>
+<option value="8">S</option>
+<option value="9">SSW</option>
+<option value="10">SW</option>
+<option value="11">WSW</option>
+<option value="12">W</option>
+<option value="13">WNW</option>
+<option value="14">NW</option>
+<option value="15">NNW</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Wind Direction at 9am</label>
+<select name="WindDir9am" required>
+<option value="">Select direction...</option>
+<option value="0">N</option>
+<option value="1">NNE</option>
+<option value="2">NE</option>
+<option value="3">ENE</option>
+<option value="4">E</option>
+<option value="5">ESE</option>
+<option value="6">SE</option>
+<option value="7">SSE</option>
+<option value="8">S</option>
+<option value="9">SSW</option>
+<option value="10">SW</option>
+<option value="11">WSW</option>
+<option value="12">W</option>
+<option value="13">WNW</option>
+<option value="14">NW</option>
+<option value="15">NNW</option>
+</select>
+</div>
+</div>
+
+<div class="form-row full">
+<div class="form-group">
+<label>Wind Direction at 3pm</label>
+<select name="WindDir3pm" required>
+<option value="">Select direction...</option>
+<option value="0">N</option>
+<option value="1">NNE</option>
+<option value="2">NE</option>
+<option value="3">ENE</option>
+<option value="4">E</option>
+<option value="5">ESE</option>
+<option value="6">SE</option>
+<option value="7">SSE</option>
+<option value="8">S</option>
+<option value="9">SSW</option>
+<option value="10">SW</option>
+<option value="11">WSW</option>
+<option value="12">W</option>
+<option value="13">WNW</option>
+<option value="14">NW</option>
+<option value="15">NNW</option>
+</select>
+</div>
+</div>
+
+<div class="section-title">☁️ Weather Conditions</div>
+
+<div class="form-row full">
+<div class="form-group">
+<label>Did it rain today?</label>
+<select name="RainToday" required>
+<option value="">Select...</option>
+<option value="0">No</option>
+<option value="1">Yes</option>
+</select>
+</div>
+</div>
+
+<div class="section-title">📅 Date</div>
+
+<div class="form-row">
+<div class="form-group">
+<label>Year</label>
+<input type="number" name="year" min="2000" max="2030" required>
+</div>
+
+<div class="form-group">
+<label>Month</label>
+<input type="number" name="month" min="1" max="12" required>
+</div>
+
+<div class="form-group">
+<label>Day</label>
+<input type="number" name="day" min="1" max="31" required>
+</div>
+</div>
+
+<button type="submit">🔮 Predict Rainfall</button>
+
+<p class="prediction-text">{{ prediction_text }}</p>
+
+</form>
+</div>
+</div>
+
+</body>
+</html>
